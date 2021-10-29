@@ -5,6 +5,7 @@ from concurrent.futures import as_completed
 from requests_futures.sessions import FuturesSession
 
 
+# Get the indicated number of games from the top games of the Steam store web page
 def get_steam_data(top):
     url = "https://store.steampowered.com/stats/Steam-Game-and-Player-Statistics"
     response = requests.get(url)
@@ -14,7 +15,7 @@ def get_steam_data(top):
 
     result = {}
 
-    for row in stat_rows[2:top+2]:
+    for row in stat_rows[2:top+2]:  # Skip the first two rows that contain the table headers
         row_data = row.select("td")
 
         anchor_tag = row_data[3].select_one("a")
@@ -28,9 +29,11 @@ def get_steam_data(top):
     return result
 
 
+# Include additional information about the games using the data shown on hovering a game in the Statistics page
 def add_game_details(games_data):
-    with FuturesSession() as session:
+    with FuturesSession() as session:  # FutureSession is used instead of the regular Session to parallelize the queries
         base_hover_url = "https://store.steampowered.com/apphoverpublic/{}"
+
         futures = [session.get(base_hover_url.format(game_id)) for game_id in games_data]
 
         for future in as_completed(futures):
