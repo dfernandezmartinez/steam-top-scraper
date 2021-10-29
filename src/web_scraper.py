@@ -39,6 +39,7 @@ def add_game_details(games_data):
         for future in as_completed(futures):
             response = future.result()
             game_id = response.request.url.split('/')[-1]
+            game_data = games_data.get(game_id)
             soup = BeautifulSoup(response.content, "html.parser")
             try:
                 release_date = soup.select_one(".hover_release").select_one("span").text
@@ -48,11 +49,11 @@ def add_game_details(games_data):
                 review_summary = soup.select_one(".game_review_summary").text
                 tags = ":".join([tag.text for tag in soup.select(".app_tag")])
 
-                game_data = games_data.get(game_id)
                 game_data += [release_date, review_summary, total_reviews, tags]
 
             # Should only fail to obtain data for Spacewar (id 480, a hidden game used by developers
             # for testing purposes) and games without a steam store page
             except AttributeError:
                 print("Additional data could not be found for the game with steam id {}".format(game_id))
+                game_data += [None, None, None, None]
                 continue
