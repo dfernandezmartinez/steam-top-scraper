@@ -49,6 +49,8 @@ El fichero CSV generado contendrá las siguientes columnas:
 - **Total reviews**: _reviews_ de usuarios totales para el juego. 
 - **Tags**: conjunto de etiquetas que describen el juego.
 
+Se puede acceder al dataset publicado en Zenodo mediante este [enlace](https://zenodo.org/record/5655273#.YYlzIGDMKUk) (10.5281/zenodo.5655273).
+
 ## Miembros del equipo
 
 Este proyecto ha sido desarrollado individualmente por **Daniel Fernández Martínez**.
